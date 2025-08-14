@@ -3,7 +3,10 @@ import typescript from '@rollup/plugin-typescript';
 import commonjs from '@rollup/plugin-commonjs';
 import dts from 'rollup-plugin-dts';
 import postcss from 'rollup-plugin-postcss';
-import packageJson from "./package.json" assert { type: 'json' };
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const packageJson = require('./package.json');
 
 export default [
     {
@@ -21,19 +24,21 @@ export default [
             },
         ],
         plugins: [
-            resolve(),
+            peerDepsExternal(),
+            resolve({ extensions: ['.mjs', '.js', '.json', '.node', '.ts', '.tsx'] }),
             commonjs(),
             typescript({
-                tsconfig: "./tsconfig.json",
-                exclude: ["**/*.test.tsx", "**/*.test.ts", "**/*stories.ts"],
+                tsconfig: './tsconfig.json',
+                exclude: ['**/*.test.tsx', '**/*.test.ts', '**/*stories.ts'],
             }),
-            postcss({extensions: ['.css'], inject: true, extract: false}),
-        ]
+            postcss({ extensions: ['.css'], inject: true, extract: false }),
+        ],
+        external: ['react', 'react-dom'],
     },
     {
-        input: "dist/esm/types/index.d.ts",
-        output:  [{file: "dist/index.d.ts", format: "esm"}],
+        input: 'src/index.ts',
+        output: [{ file: 'dist/index.d.ts', format: 'esm' }],
         plugins: [dts()],
         external: [/\.css$/],
-    }
+    },
 ];
