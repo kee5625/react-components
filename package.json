@@ -12,12 +12,15 @@
   },
   "license": "MIT",
   "author": "Karthik Rachamolla",
-  "type": "commonjs",
-  "main": "index.js",
+  "type": "module",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "@types/react": "^19.1.10",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "typescript": "^5.9.2"
   },
   "peerDependencies": {
